@@ -16,7 +16,7 @@ spec:
       initContainers:
         - name: migrate
           image: ghcr.io/xmicman/pushup-challenge:latest
-          command: ["node_modules/.bin/prisma", "migrate", "deploy"]
+          command: ["sh", "-c", "node_modules/.bin/prisma migrate deploy --url $DATABASE_URL"]
           env:
             - name: DATABASE_URL
               valueFrom:
