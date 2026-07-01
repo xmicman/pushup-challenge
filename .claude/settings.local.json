@@ -1,0 +1,16 @@
+{
+  "permissions": {
+    "allow": [
+      "Read(//Users/manas/.ssh/**)",
+      "Bash(awk '{print $1}')",
+      "Read(//Users/manas/mia-infra/k3s/**)",
+      "Bash(ssh *)",
+      "Bash(gh auth *)",
+      "Bash(gh api *)",
+      "Bash(gh repo *)",
+      "Bash(openssl rand *)",
+      "Bash(gh secret *)",
+      "Bash(npx create-next-app@latest *)"
+    ]
+  }
+}
