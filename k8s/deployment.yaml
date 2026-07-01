@@ -13,6 +13,16 @@ spec:
       labels:
         app: pushup-app
     spec:
+      initContainers:
+        - name: migrate
+          image: ghcr.io/xmicman/pushup-challenge:latest
+          command: ["node", "node_modules/prisma/build/index.js", "migrate", "deploy"]
+          env:
+            - name: DATABASE_URL
+              valueFrom:
+                secretKeyRef:
+                  name: pushup-secret
+                  key: DATABASE_URL
       containers:
         - name: pushup-app
           image: ghcr.io/xmicman/pushup-challenge:latest

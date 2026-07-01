@@ -75,6 +75,9 @@ jobs:
             --from-literal=CRON_SECRET="${{ secrets.CRON_SECRET }}" \
             --dry-run=client -o yaml | kubectl apply -f -
 
+      - name: Apply network policy for postgres access
+        run: kubectl apply -f k8s/networkpolicy-postgres.yaml
+
       - name: Apply deployment & cronjob
         run: |
           kubectl apply -f k8s/deployment.yaml
@@ -85,9 +88,4 @@ jobs:
           kubectl set image deployment/pushup-app \
             pushup-app=${{ env.IMAGE }}:latest \
             -n pushup
-          kubectl rollout status deployment/pushup-app -n pushup --timeout=120s
-
-      - name: Run DB migrations
-        run: |
-          kubectl exec -n pushup deployment/pushup-app -- \
-            npx prisma migrate deploy
+          kubectl rollout status deployment/pushup-app -n pushup --timeout=180s
