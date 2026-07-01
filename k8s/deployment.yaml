@@ -16,7 +16,7 @@ spec:
       initContainers:
         - name: migrate
           image: ghcr.io/xmicman/pushup-challenge:latest
-          command: ["node", "node_modules/prisma/build/index.js", "migrate", "deploy"]
+          command: ["node_modules/.bin/prisma", "migrate", "deploy"]
           env:
             - name: DATABASE_URL
               valueFrom:
@@ -59,10 +59,10 @@ spec:
           resources:
             requests:
               cpu: 100m
-              memory: 256Mi
+              memory: 512Mi
             limits:
               cpu: 500m
-              memory: 512Mi
+              memory: 1Gi
           readinessProbe:
             httpGet:
               path: /api/leaderboard
