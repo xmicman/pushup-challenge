@@ -1,0 +1,27 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: pushup-strikes
+  namespace: pushup
+spec:
+  schedule: "5 0 * * *"  # každý den 00:05 UTC
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          restartPolicy: OnFailure
+          containers:
+            - name: strike-runner
+              image: curlimages/curl:latest
+              command:
+                - sh
+                - -c
+                - |
+                  curl -sf -X POST https://pushups.micman.cz/api/strikes \
+                    -H "Authorization: Bearer $(CRON_SECRET)"
+              env:
+                - name: CRON_SECRET
+                  valueFrom:
+                    secretKeyRef:
+                      name: pushup-secret
+                      key: CRON_SECRET
