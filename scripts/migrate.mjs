@@ -1,5 +1,5 @@
 import pg from "pg"
-import { readFileSync } from "fs"
+import { readFileSync, readdirSync } from "fs"
 import { fileURLToPath } from "url"
 import { dirname, join } from "path"
 
@@ -11,7 +11,6 @@ const pool = new Pool({ connectionString: process.env.DATABASE_URL })
 async function migrate() {
   const client = await pool.connect()
   try {
-    // Ensure migrations tracking table exists
     await client.query(`
       CREATE TABLE IF NOT EXISTS "_prisma_migrations" (
         id VARCHAR(36) PRIMARY KEY,
@@ -26,16 +25,20 @@ async function migrate() {
     `)
 
     const migrationsDir = join(__dir, "../prisma/migrations")
-    const sql = readFileSync(join(migrationsDir, "20260701091426_init/migration.sql"), "utf8")
-    const name = "20260701091426_init"
+    const dirs = readdirSync(migrationsDir, { withFileTypes: true })
+      .filter((d) => d.isDirectory())
+      .map((d) => d.name)
+      .sort()
 
-    const { rows } = await client.query(
-      `SELECT id FROM "_prisma_migrations" WHERE migration_name = $1`, [name]
-    )
-
-    if (rows.length > 0) {
-      console.log(`Migration ${name} already applied, skipping.`)
-    } else {
+    for (const name of dirs) {
+      const { rows } = await client.query(
+        `SELECT id FROM "_prisma_migrations" WHERE migration_name = $1`, [name]
+      )
+      if (rows.length > 0) {
+        console.log(`Migration ${name} already applied, skipping.`)
+        continue
+      }
+      const sql = readFileSync(join(migrationsDir, name, "migration.sql"), "utf8")
       console.log(`Applying migration ${name}...`)
       await client.query(sql)
       await client.query(
