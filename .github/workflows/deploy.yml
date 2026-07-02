@@ -75,8 +75,10 @@ jobs:
             --from-literal=CRON_SECRET="${{ secrets.CRON_SECRET }}" \
             --dry-run=client -o yaml | kubectl apply -f -
 
-      - name: Apply network policy for postgres access
-        run: kubectl apply -f k8s/networkpolicy-postgres.yaml
+      - name: Apply network policies
+        run: |
+          kubectl apply -f k8s/networkpolicy-postgres.yaml
+          kubectl apply -f k8s/networkpolicy-traefik.yaml
 
       - name: Apply deployment & cronjob
         run: |

@@ -31,7 +31,7 @@ metadata:
   namespace: pushup
   annotations:
     traefik.ingress.kubernetes.io/router.entrypoints: web
-    traefik.ingress.kubernetes.io/router.middlewares: mia-system-redirect-https@kubernetescrd
+    traefik.ingress.kubernetes.io/router.middlewares: mia-system-https-redirect@kubernetescrd
 spec:
   ingressClassName: traefik
   rules:
