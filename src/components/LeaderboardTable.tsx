@@ -1,7 +1,6 @@
 "use client"
 
 import { useEffect, useState } from "react"
-import Image from "next/image"
 
 type Entry = {
   id: string
@@ -52,7 +51,8 @@ export default function LeaderboardTable() {
               <td className="px-4 py-3">
                 <div className="flex items-center gap-2">
                   {entry.image && (
-                    <Image src={entry.image} alt="" width={24} height={24} className="rounded-full" />
+                    // eslint-disable-next-line @next/next/no-img-element
+                    <img src={entry.image} alt="" width={24} height={24} className="rounded-full" />
                   )}
                   <span className={entry.eliminated ? "line-through text-gray-400" : "font-medium text-gray-900"}>
                     {entry.name ?? "Anonym"}

@@ -2,7 +2,6 @@
 
 import { useSession, signIn, signOut } from "next-auth/react"
 import Link from "next/link"
-import Image from "next/image"
 
 export default function Navbar() {
   const { data: session } = useSession()
@@ -21,7 +20,8 @@ export default function Navbar() {
               </Link>
               <div className="flex items-center gap-2">
                 {session.user.image && (
-                  <Image
+                  // eslint-disable-next-line @next/next/no-img-element
+                  <img
                     src={session.user.image}
                     alt={session.user.name ?? ""}
                     width={28}
