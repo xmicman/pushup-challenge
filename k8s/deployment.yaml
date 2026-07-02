@@ -16,6 +16,7 @@ spec:
       initContainers:
         - name: migrate
           image: ghcr.io/xmicman/pushup-challenge:latest
+          imagePullPolicy: Always
           command: ["node", "scripts/migrate.mjs"]
           env:
             - name: DATABASE_URL
@@ -26,6 +27,7 @@ spec:
       containers:
         - name: pushup-app
           image: ghcr.io/xmicman/pushup-challenge:latest
+          imagePullPolicy: Always
           ports:
             - containerPort: 3000
           env:
