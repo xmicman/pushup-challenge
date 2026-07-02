@@ -85,9 +85,7 @@ jobs:
           kubectl apply -f k8s/deployment.yaml
           kubectl apply -f k8s/cronjob.yaml
 
-      - name: Force rollout with new image
+      - name: Rollout new image
         run: |
-          kubectl set image deployment/pushup-app \
-            pushup-app=${{ env.IMAGE }}:latest \
-            -n pushup
+          kubectl rollout restart deployment/pushup-app -n pushup
           kubectl rollout status deployment/pushup-app -n pushup --timeout=180s
